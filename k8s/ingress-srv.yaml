@@ -10,16 +10,6 @@ spec:
     - host: clido.com
       http:
         paths:
-        - path: /?(.*)
-          pathType: Prefix
-          backend:
-            service:
-              name: frontend-srv
-              port:
-                number: 3000
-    - host: api-clido.com
-      http:
-        paths:
           - path: /api/auth/?(.*)
             pathType: Prefix
             backend:
@@ -27,3 +17,11 @@ spec:
                 name: api-auth-srv
                 port:
                   number: 4000
+          - path: /?(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: frontend-srv
+                port:
+                  number: 3000
+

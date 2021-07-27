@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: frontend
-          image: csgn/frontend
+          image: csgn/clido-frontend
 ---
 apiVersion: v1
 kind: Service

@@ -20,7 +20,7 @@ const start = async () => {
   console.log('Connected to MongoDB');
 
   app.listen(4000, () => {
-    console.log('Listening on 3000');
+    console.log('Listening on 4000');
   });
 };
 

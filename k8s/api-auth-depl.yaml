@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: api-auth
-          image: csgn/api-auth
+          image: csgn/clido-auth
           env:
             - name: JWT_KEY
               valueFrom: 
