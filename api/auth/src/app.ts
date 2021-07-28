@@ -2,7 +2,6 @@
 import Express from 'express';
 import cookieSession from 'cookie-session';
 import 'express-async-errors';
-import cors from 'cors';
 
 import { signupRouter } from './routes/signup';
 import { signinRouter } from './routes/signin';
@@ -13,11 +12,8 @@ import { errorHandler } from './middlewares/error-handler';
 import { NotFoundError } from './errors/not-found-error';
 
 const app = Express();
-
 app.set('trust proxy', true);
-
 app.use(Express.json());
-app.use(cors({ credentials: true }));
 
 app.use(
   cookieSession({

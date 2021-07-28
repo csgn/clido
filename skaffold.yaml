@@ -16,7 +16,14 @@ build:
         manual:
           - dest: .
             src: 'src/**/*.ts'
-
+    - image: csgn/clido-event
+      context: api/event
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - dest: .
+            src: 'src/**/*.ts'
     - image: csgn/clido-frontend
       context: frontend
       docker:

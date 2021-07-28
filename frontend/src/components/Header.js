@@ -2,7 +2,7 @@ import React from 'react';
 
 const Header = () => {
   return (
-    <div
+    <header
       className="col-12 d-flex justify-content-center fs-4 fw-bold"
       style={{
         color: '#00CC66',
@@ -11,7 +11,7 @@ const Header = () => {
       <p className="text-center mt-5" href="#">
         clido
       </p>
-    </div>
+    </header>
   );
 };
 

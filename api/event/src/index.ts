@@ -3,12 +3,8 @@ import Mongoose from 'mongoose';
 import { app } from './app';
 
 const start = async () => {
-  if (!process.env.JWT_KEY) {
-    throw new Error('JWT_KEY must be defined');
-  }
-
   try {
-    await Mongoose.connect('mongodb://db-auth-mongo-srv:27017/auth', {
+    await Mongoose.connect('mongodb://db-event-mongo-srv:27017/event', {
       useNewUrlParser: true,
       useUnifiedTopology: true,
       useCreateIndex: true,
@@ -17,10 +13,10 @@ const start = async () => {
     console.error(error);
   }
 
-  console.log('Connected to auth MongoDB');
+  console.log('Connected to event MongoDB');
 
-  app.listen(4000, () => {
-    console.log('Listening on 4000');
+  app.listen(4001, () => {
+    console.log('Listening on 4001');
   });
 };
 

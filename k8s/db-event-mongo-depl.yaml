@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: db-event-mongo-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: db-event-mongo
+  template:
+    metadata:
+      labels:
+        app: db-event-mongo
+    spec:
+      containers:
+        - name: db-event-mongo
+          image: mongo
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: db-event-mongo-srv
+spec:
+  selector:
+    app: db-event-mongo
+  ports:
+    - name: db-event-mongo
+      protocol: TCP
+      port: 27017
+      targetPort: 27017
