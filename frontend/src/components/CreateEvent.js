@@ -1,8 +1,11 @@
+import axios from 'axios';
 import React from 'react';
 
 class CreateEvent extends React.Component {
   constructor(props) {
     super(props);
+
+    this.handleInput = this.handleInput.bind(this);
 
     this.state = {
       eventName: '',
@@ -52,9 +55,23 @@ class CreateEvent extends React.Component {
     });
   }
 
+  async handleInput(event) {
+    event.preventDefault();
+    const response = await axios.post('/api/event/create', {
+      userId: this.props.currentUser.id,
+      eventName: this.state.eventName,
+      startDate: this.state.startDate,
+      endDate: this.state.endDate,
+    });
+    console.log(response);
+  }
+
   render() {
     return (
-      <form className="row d-flex justify-content-center text-center pb-5 mt-5 animate__animated animate__fadeIn">
+      <form
+        className="row d-flex justify-content-center text-center pb-5 mt-5 animate__animated animate__fadeIn"
+        onSubmit={this.handleInput}
+      >
         <h3 className="h3 text-light">Schedule Clido</h3>
         <div className="col-12 d-flex justify-content-center mt-2">
           <div className="form-floating mb-3">
@@ -66,6 +83,8 @@ class CreateEvent extends React.Component {
               placeholder="Event name"
               autoFocus
               required
+              value={this.state.eventName}
+              onChange={(e) => this.setState({ eventName: e.target.value })}
             />
             <label htmlFor="floatingInput">Event name</label>
           </div>

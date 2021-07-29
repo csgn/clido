@@ -17,7 +17,7 @@ class Home extends React.Component {
   handleInput(event) {
     event.preventDefault();
 
-    if (this.state.eventId.length < 5) {
+    if (this.state.eventId.length < 6) {
       this.setState({
         error: true,
       });

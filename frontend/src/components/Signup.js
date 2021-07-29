@@ -57,6 +57,7 @@ class Signup extends React.Component {
               style={{ width: '22rem' }}
               placeholder="Email"
               required
+              autoFocus
               value={this.state.email}
               onChange={(e) => this.setState({ email: e.target.value })}
             />
