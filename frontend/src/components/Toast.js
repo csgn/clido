@@ -5,27 +5,30 @@ class Toast extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = { visible: true };
+    this.state = { isHidden: false };
   }
 
   componentDidMount() {
     setTimeout(() => {
-      this.setState({ visible: !this.state.visible });
-      this.props.showToast();
-    }, 2500);
+      this.props.toggleToast();
+    }, 1500);
+  }
+
+  componentWillUnmount() {
+    this.setState({ isHidden: true });
   }
 
   render() {
     return (
-      <div className="animate__animated animate__fadeIn">
-        {this.state.visible && (
-          <div className="clido-toast ">
-            <div className="m-3 pt-1">
-              <i className="fas fa-info-circle me-2"></i>
-              <span className="">Event Removed</span>
-            </div>
-          </div>
-        )}
+      <div
+        className={`clido-toast animate__animated animate__fadeInLeft ${
+          this.state.isHidden ? 'd-none' : ''
+        }`}
+      >
+        <div className="m-3 pt-1">
+          <i className="fas fa-info-circle me-2"></i>
+          <span className="">Event Removed</span>
+        </div>
       </div>
     );
   }

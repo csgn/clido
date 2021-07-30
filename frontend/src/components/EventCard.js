@@ -67,7 +67,7 @@ class EventCard extends React.Component {
       })
       .then((result) => {
         this.props.fetchUserEvents();
-        this.props.showToast();
+        this.props.toggleToast();
       })
       .catch((err) => {
         console.error(err);

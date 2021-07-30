@@ -10,9 +10,9 @@ class UserDetail extends React.Component {
     super(props);
 
     this.fetchUserEvents = this.fetchUserEvents.bind(this);
-    this.showToast = this.showToast.bind(this);
+    this.toggleToast = this.toggleToast.bind(this);
 
-    this.state = { events: [], toast: false };
+    this.state = { events: [], toastIsShown: false };
   }
 
   async fetchUserEvents() {
@@ -23,8 +23,8 @@ class UserDetail extends React.Component {
     this.setState({ events: events.data });
   }
 
-  async showToast() {
-    this.setState({ toast: !this.state.toast });
+  toggleToast() {
+    this.setState({ toastIsShown: !this.state.toastIsShown });
   }
 
   componentDidMount() {
@@ -44,14 +44,15 @@ class UserDetail extends React.Component {
                 event={event}
                 userId={this.props.currentUser.id}
                 fetchUserEvents={this.fetchUserEvents}
-                showToast={this.showToast}
+                toggleToast={this.toggleToast}
               />
             </li>
           );
         })
       ) : (
         <div className="text-center">
-          <span className="h5 text-danger me-3">
+          <span className="h5 text-warning">
+            <i className="fas fa-info me-2"></i>
             There are no clido's scheduled here.
           </span>
           <br />
@@ -68,13 +69,12 @@ class UserDetail extends React.Component {
     return (
       <>
         <div
-          className="text-light d-flex justify-content-center animate__animated animate__fadeIn mt-6"
+          className="text-light d-flex justify-content-center animate__animated animate__fadeIn mt-5 pt-5"
           style={{ marginBottom: '49px' }}
         >
           <ul className="list-group">{renderedEventCards}</ul>
         </div>
-
-        {this.state.toast && <Toast showToast={this.showToast} />}
+        {this.state.toastIsShown && <Toast toggleToast={this.toggleToast} />}
       </>
     );
   }
