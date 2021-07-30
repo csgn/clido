@@ -1,0 +1,12 @@
+.clido-toast {
+  background-color: #00cc66;
+  border-radius: 3px;
+  border: 1px #008844 solid;
+  color: #fff;
+  width: auto;
+  height: 4rem;
+  position: absolute;
+  left: 19px;
+  bottom: 90px;
+  font-size: large;
+}

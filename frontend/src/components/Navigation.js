@@ -56,8 +56,12 @@ class Navigation extends React.Component {
           </Route>
         </Switch>
 
-        <footer className="footer fixed-bottom flex-shrink-0 mt-auto py-3">
-          <hr className="text-muted" />
+        <footer
+          className="footer fixed-bottom flex-shrink-3 mt-auto py-3 bg-dark"
+          style={{
+            borderTop: '0.5px #cccccc solid',
+          }}
+        >
           <div className="container d-flex justify-content-center">
             <Link to="/" className="me-2 text-light text-decoration-none">
               <i className="fas fa-home me-2"></i>

@@ -1,5 +1,6 @@
 import axios from 'axios';
 import React from 'react';
+import { Redirect } from 'react-router-dom';
 
 class CreateEvent extends React.Component {
   constructor(props) {
@@ -12,6 +13,7 @@ class CreateEvent extends React.Component {
       startDate: new Date(Date.now()),
       endDate: new Date(Date.now()),
       error: false,
+      redirect: null,
     };
   }
 
@@ -63,10 +65,17 @@ class CreateEvent extends React.Component {
       startDate: this.state.startDate,
       endDate: this.state.endDate,
     });
-    console.log(response);
+
+    if (response) {
+      this.setState({ redirect: `/user/${this.props.currentUser.id}` });
+    }
   }
 
   render() {
+    if (this.state.redirect) {
+      return <Redirect to={this.state.redirect} />;
+    }
+
     return (
       <form
         className="row d-flex justify-content-center text-center pb-5 mt-5 animate__animated animate__fadeIn"
@@ -81,6 +90,7 @@ class CreateEvent extends React.Component {
               type="text"
               style={{ width: '25.5rem' }}
               placeholder="Event name"
+              maxLength="13"
               autoFocus
               required
               value={this.state.eventName}

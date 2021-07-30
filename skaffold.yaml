@@ -31,4 +31,6 @@ build:
       sync:
         manual:
           - dest: .
-            src: '**/*.js'
+            src: 'src/**/*.js'
+          - dest: .
+            src: 'src/**/*.css'
