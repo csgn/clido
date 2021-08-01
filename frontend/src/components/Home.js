@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/alt-text */
 import './Home.css';
-
 import React from 'react';
+import { NavLink } from 'react-router-dom';
 
 import LastEvent from './LastEvent';
 
@@ -111,7 +111,23 @@ class Home extends React.Component {
             </div>
           </div>
         </div>
-        <LastEvent currentUser={this.props.currentUser} />
+        {this.props.currentUser ? (
+          <LastEvent currentUser={this.props.currentUser} />
+        ) : (
+          <div className="row mt-5">
+            <div className="col-12 d-flex justify-content-center">
+              <NavLink to="/signup" className="btn btn-primary">
+                Create account
+              </NavLink>
+            </div>
+            <div className="col-12 d-flex justify-content-center mt-3">
+              <span className="text-muted me-2">Already have an account?</span>
+              <NavLink to="/signin" className="text-decoration-none fw-bold">
+                Sign In
+              </NavLink>
+            </div>
+          </div>
+        )}
       </div>
     );
   }

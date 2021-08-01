@@ -1,6 +1,7 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 
 import React from 'react';
+import { NavLink } from 'react-router-dom';
 
 import axios from 'axios';
 
@@ -8,7 +9,6 @@ class EventCard extends React.Component {
   constructor(props) {
     super(props);
 
-    this.handleOpenButton = this.handleOpenButton.bind(this);
     this.handleRemoveButton = this.handleRemoveButton.bind(this);
     this.handleShareButton = this.handleShareButton.bind(this);
 
@@ -58,8 +58,6 @@ class EventCard extends React.Component {
     return finalDate.join(' ').toString();
   }
 
-  handleOpenButton() {}
-
   async handleRemoveButton() {
     await axios
       .post(`/api/event/${this.state.eventId}/remove`, {
@@ -86,7 +84,10 @@ class EventCard extends React.Component {
           <div className="col-auto">
             <i className="fas fa-calendar text-light mt-4 pt-2 ms-4"></i>
           </div>
-          <div className="col-8">
+          <NavLink
+            className="col-8 text-decoration-none"
+            to={`/event/${this.state.eventId}`}
+          >
             <div className="card-body text-light">
               <div className="card-title">
                 <span className="me-2 ps-2">{this.state.eventName}</span>
@@ -98,7 +99,8 @@ class EventCard extends React.Component {
                 </span>
               </div>
             </div>
-          </div>
+          </NavLink>
+
           <div className="col-auto">
             <div className="dropdown">
               <button
@@ -119,13 +121,13 @@ class EventCard extends React.Component {
                 aria-labelledby="propertiesMenu"
               >
                 <li>
-                  <button
+                  <NavLink
+                    to={`/event/${this.state.eventId}`}
                     className="dropdown-item bg-dark text-light"
-                    onClick={(e) => this.handleOpenButton()}
                   >
                     <i className="fas fa-marker me-2"></i>
                     Open
-                  </button>
+                  </NavLink>
                 </li>
                 <li>
                   <button

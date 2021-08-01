@@ -81,7 +81,7 @@ class CreateEvent extends React.Component {
         className="row d-flex justify-content-center text-center pb-5 mt-5 animate__animated animate__fadeIn"
         onSubmit={this.handleInput}
       >
-        <h3 className="h3 text-light">Schedule Clido</h3>
+        <h3 className="h3 text-light mt-5">Schedule Clido</h3>
         <div className="col-12 d-flex justify-content-center mt-2">
           <div className="form-floating mb-3">
             <input
