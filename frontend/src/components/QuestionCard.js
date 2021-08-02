@@ -1,10 +1,14 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
+import moment from 'moment';
 
 class QuestionCard extends React.Component {
   render() {
     return (
-      <div className="card mb-3 border-light shadow" style={{ width: '30rem' }}>
+      <div
+        className="card border-light shadow mt-3"
+        style={{ maxWidth: '35rem' }}
+      >
         <div className="row g-0">
           <div className="card-body bg-light">
             <div className="col-12 text-dark">
@@ -15,7 +19,7 @@ class QuestionCard extends React.Component {
                     {this.props.question.name}
                   </span>
                   <div className="card-subititle text-muted h6 ps-1">
-                    {this.props.question.date.split('T')[1]}
+                    {moment(new Date(this.props.question.date)).fromNow()}
                   </div>
                 </div>
                 <div>

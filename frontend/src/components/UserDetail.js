@@ -1,3 +1,5 @@
+import './UserDetail.css';
+
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import axios from 'axios';
@@ -73,7 +75,7 @@ class UserDetail extends React.Component {
           style={{ marginBottom: '49px' }}
         >
           {this.state.events.length !== 0 && (
-            <div>
+            <div style={{ maxWidth: '35rem' }} className="center">
               <div className="d-flex justify-content-between">
                 <p className="m-auto ms-4">Active Events</p>
                 <NavLink
