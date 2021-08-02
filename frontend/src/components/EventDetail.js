@@ -67,7 +67,10 @@ class EventDetail extends React.Component {
         this.state.questions.map((question) => {
           return (
             <li className="list-item pb-3" key={question._id}>
-              <QuestionCard question={question} />
+              <QuestionCard
+                question={question}
+                fetchEventQuestions={this.fetchEventQuestions}
+              />
             </li>
           );
         })

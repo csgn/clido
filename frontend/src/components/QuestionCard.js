@@ -1,8 +1,33 @@
 import React from 'react';
-import { NavLink } from 'react-router-dom';
 import moment from 'moment';
 
 class QuestionCard extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.handleWithdraw = this.handleWithdraw.bind(this);
+    this.handleEdit = this.handleEdit.bind(this);
+    this.handleVote = this.handleVote.bind(this);
+  }
+
+  handleWithdraw(event) {
+    event.preventDefault();
+
+    console.log(this.props.question._id);
+  }
+
+  handleEdit(event) {
+    event.preventDefault();
+
+    console.log(this.props.question._id);
+  }
+
+  handleVote(event) {
+    event.preventDefault();
+
+    console.log(this.props.question._id);
+  }
+
   render() {
     return (
       <div
@@ -27,6 +52,7 @@ class QuestionCard extends React.Component {
                     className="btn rounded"
                     type="button"
                     id="propertiesMenu"
+                    onClick={this.handleVote}
                   >
                     <span className="pe-2 text-dark">
                       {this.props.question.vote}
@@ -63,16 +89,19 @@ class QuestionCard extends React.Component {
                   aria-labelledby="propertiesMenu"
                 >
                   <li>
-                    <NavLink
-                      to="/"
+                    <button
                       className="dropdown-item bg-light text-dark"
+                      onClick={this.handleEdit}
                     >
                       <i className="fas fa-marker me-2"></i>
                       Edit
-                    </NavLink>
+                    </button>
                   </li>
                   <li>
-                    <button className="dropdown-item bg-light text-dark">
+                    <button
+                      className="dropdown-item bg-light text-dark"
+                      onClick={this.handleWithdraw}
+                    >
                       <i className="fas fa-trash me-2"></i>
                       Withdraw
                     </button>
