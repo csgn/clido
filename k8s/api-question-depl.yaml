@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api-question-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: api-question
+  template:
+    metadata:
+      labels:
+        app: api-question
+    spec:
+      containers:
+        - name: api-question
+          image: csgn/clido-question
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: api-question-srv
+spec:
+  selector:
+    app: api-question
+  ports:
+    - name: api-question
+      protocol: TCP
+      port: 4002
+      targetPort: 4002

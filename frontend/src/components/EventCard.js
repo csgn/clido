@@ -86,7 +86,13 @@ class EventCard extends React.Component {
           </div>
           <NavLink
             className="col-8 text-decoration-none"
-            to={`/event/${this.state.eventId}`}
+            to={{
+              pathname: `/event/${this.state.eventId}`,
+              state: {
+                event: this.props.event,
+                finalDate: this.state.finalDate,
+              },
+            }}
           >
             <div className="card-body text-light">
               <div className="card-title">

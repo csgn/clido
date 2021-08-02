@@ -24,6 +24,14 @@ build:
         manual:
           - dest: .
             src: 'src/**/*.ts'
+    - image: csgn/clido-question
+      context: api/question
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - dest: .
+            src: 'src/**/*.ts'
     - image: csgn/clido-frontend
       context: frontend
       docker:

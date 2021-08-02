@@ -1,0 +1,9 @@
+.remove-border {
+  border: none;
+}
+
+.remove-border:focus {
+  border: none;
+  outline: none;
+  box-shadow: none !important;
+}

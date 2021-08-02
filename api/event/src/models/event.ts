@@ -21,7 +21,7 @@ interface IEventModel extends Mongoose.Model<IEventDoc> {
   build(attrs: IEventAttrs): IEventDoc;
 }
 
-const UserEventSchema = new Mongoose.Schema(
+const EventSchema = new Mongoose.Schema(
   {
     userId: {
       type: String,
@@ -51,7 +51,7 @@ const UserEventSchema = new Mongoose.Schema(
   { collection: 'events' }
 );
 
-UserEventSchema.statics.build = (attrs: IEventAttrs) => {
+EventSchema.statics.build = (attrs: IEventAttrs) => {
   const event = new Event();
   event.userId = attrs.userId;
   event.events.push(attrs.events[0]);
@@ -59,6 +59,6 @@ UserEventSchema.statics.build = (attrs: IEventAttrs) => {
   return event;
 };
 
-const Event = Mongoose.model<IEventDoc, IEventModel>('Event', UserEventSchema);
+const Event = Mongoose.model<IEventDoc, IEventModel>('Event', EventSchema);
 
 export { Event, IEventArrayAttrs };
