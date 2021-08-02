@@ -27,7 +27,7 @@ class App extends React.Component {
   render() {
     return (
       <div className="container mt-5">
-        <Header />
+        <Header currentUser={this.state.currentUser} />
         <Navigation
           currentUser={this.state.currentUser}
           getCurrentUser={this.getCurrentUser}

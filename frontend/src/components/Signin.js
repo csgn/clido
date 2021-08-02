@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Redirect } from 'react-router-dom';
+import { Redirect, NavLink } from 'react-router-dom';
 
 import axios from 'axios';
 
@@ -51,7 +51,7 @@ class Signin extends React.Component {
         className="row d-flex justify-content-center text-center pb-5 mt-5 animate__animated animate__fadeIn"
         onSubmit={this.handleInput}
       >
-        <h3 className="h3 text-light">Sign In</h3>
+        <h3 className="h5 text-light mt-5">Sign In</h3>
         <div className="col-12 d-flex justify-content-center mt-2">
           <div className="form-floating mb-3">
             <input
@@ -100,6 +100,12 @@ class Signin extends React.Component {
           </button>
         </div>
         {this.state.errorOrRedirect}
+        <div className="col-12 d-flex justify-content-center mt-3">
+          <span className="text-muted me-2">New to Clido?</span>
+          <NavLink to="/signup" className="text-decoration-none fw-bold">
+            Create an account.
+          </NavLink>
+        </div>
       </form>
     );
   }

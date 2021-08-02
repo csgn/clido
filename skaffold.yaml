@@ -1,4 +1,4 @@
-apiVersion: skaffold/v2alpha3
+apiVersion: skaffold/v2beta19
 kind: Config
 deploy:
   kubectl:
@@ -18,6 +18,14 @@ build:
             src: 'src/**/*.ts'
     - image: csgn/clido-event
       context: api/event
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - dest: .
+            src: 'src/**/*.ts'
+    - image: csgn/clido-question
+      context: api/question
       docker:
         dockerfile: Dockerfile
       sync:

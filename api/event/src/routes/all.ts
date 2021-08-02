@@ -1,6 +1,6 @@
 import Express from 'express';
 
-import { Event, IEventArrayAttrs } from '../models/event';
+import { Event } from '../models/event';
 
 const router = Express.Router();
 
