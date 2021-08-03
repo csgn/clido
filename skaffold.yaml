@@ -15,7 +15,7 @@ build:
       sync:
         manual:
           - dest: .
-            src: 'src/**/*.ts'
+            src: 'src/***/*.ts'
     - image: csgn/clido-event
       context: api/event
       docker:
@@ -23,7 +23,7 @@ build:
       sync:
         manual:
           - dest: .
-            src: 'src/**/*.ts'
+            src: 'src/***/*.ts'
     - image: csgn/clido-question
       context: api/question
       docker:
@@ -31,7 +31,7 @@ build:
       sync:
         manual:
           - dest: .
-            src: 'src/**/*.ts'
+            src: 'src/***/*.ts'
     - image: csgn/clido-frontend
       context: frontend
       docker:

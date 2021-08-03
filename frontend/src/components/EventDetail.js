@@ -3,6 +3,8 @@ import './EventDetail.css';
 import React from 'react';
 import axios from 'axios';
 
+import { toFinalDate } from './DateUtils';
+
 import QuestionCard from './QuestionCard';
 
 class EventDetail extends React.Component {
@@ -14,6 +16,7 @@ class EventDetail extends React.Component {
     this.handleInput = this.handleInput.bind(this);
 
     this.state = {
+      event: null,
       questions: [],
       nameInput: '',
       contextInput: '',
@@ -37,7 +40,7 @@ class EventDetail extends React.Component {
     };
 
     await axios.post(
-      `/api/question/${this.props.location.state.event.eventId}/create`,
+      `/api/question/${this.props.match.params.eventId}/create`,
       {
         ...questionData,
       }
@@ -48,9 +51,17 @@ class EventDetail extends React.Component {
     this.setState({ contextInput: '' });
   }
 
+  async fetchEvent() {
+    const event = await axios.get(
+      `/api/event/${this.props.match.params.eventId}`
+    );
+
+    this.setState({ event: event.data.event });
+  }
+
   async fetchEventQuestions() {
     const questions = await axios.post(
-      `/api/question/${this.props.location.state.event.eventId}/all`,
+      `/api/question/${this.props.match.params.eventId}/all`,
       {}
     );
 
@@ -58,6 +69,7 @@ class EventDetail extends React.Component {
   }
 
   componentDidMount() {
+    this.fetchEvent();
     this.fetchEventQuestions();
   }
 
@@ -87,16 +99,16 @@ class EventDetail extends React.Component {
     return (
       <>
         <div className="row mt-5">
-          {this.props.location.state.event && (
+          {this.state.event && (
             <div className="col-md-4 mt-5">
               <div className="h4 text-light">
-                {this.props.location.state.event.eventName}
+                {this.state.event.eventName || null}
               </div>
               <div className="h5 text-muted">
-                {this.props.location.state.finalDate}
+                {toFinalDate({ ...this.state.event }) || null}
               </div>
               <div className="h6 text-muted">
-                #{this.props.location.state.event.eventId}
+                #{this.state.event.eventId || null}
               </div>
             </div>
           )}

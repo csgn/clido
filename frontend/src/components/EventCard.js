@@ -5,6 +5,8 @@ import { NavLink } from 'react-router-dom';
 
 import axios from 'axios';
 
+import { toFinalDate } from './DateUtils';
+
 class EventCard extends React.Component {
   constructor(props) {
     super(props);
@@ -13,49 +15,9 @@ class EventCard extends React.Component {
     this.handleShareButton = this.handleShareButton.bind(this);
 
     const { eventName, eventId } = props.event;
-
-    const finalDate = this.toString({
-      startDate: new Date(props.event.startDate),
-      endDate: new Date(props.event.endDate),
-    });
+    const finalDate = toFinalDate({ ...props.event });
 
     this.state = { eventName, eventId, finalDate };
-  }
-
-  toString({ startDate, endDate }) {
-    const startDateArray = startDate.toDateString().toString().split(' ');
-    const endDateArray = endDate.toDateString().toString().split(' ');
-
-    const sdd = startDateArray[2];
-    const edd = endDateArray[2];
-
-    const smm = startDateArray[1];
-    const emm = endDateArray[1];
-
-    const syy = startDateArray[3];
-    const eyy = endDateArray[3];
-
-    let finalDate = [];
-    finalDate.push(sdd);
-
-    if (smm === emm) {
-      if (sdd !== edd) {
-        finalDate.push('-');
-        finalDate.push(edd);
-      }
-      finalDate.push(smm);
-    } else {
-      finalDate.push(smm);
-      finalDate.push('-');
-      finalDate.push(edd);
-      finalDate.push(emm);
-    }
-
-    if (syy === eyy) {
-      finalDate.push(syy);
-    }
-
-    return finalDate.join(' ').toString();
   }
 
   async handleRemoveButton() {
@@ -63,7 +25,7 @@ class EventCard extends React.Component {
       .post(`/api/event/${this.state.eventId}/remove`, {
         userId: this.props.userId,
       })
-      .then((result) => {
+      .then(() => {
         this.props.fetchUserEvents();
         this.props.toggleToast();
       })
@@ -86,13 +48,7 @@ class EventCard extends React.Component {
           </div>
           <NavLink
             className="col-8 text-decoration-none"
-            to={{
-              pathname: `/event/${this.state.eventId}`,
-              state: {
-                event: this.props.event,
-                finalDate: this.state.finalDate,
-              },
-            }}
+            to={`/event/${this.state.eventId}`}
           >
             <div className="card-body text-light">
               <div className="card-title">
