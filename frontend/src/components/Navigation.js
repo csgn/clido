@@ -22,7 +22,12 @@ class Navigation extends React.Component {
             />
           </Route>
 
-          <Route path={`/event/:eventId?`} component={EventDetail} />
+          <Route
+            path={`/event/:eventId?`}
+            component={(props) => (
+              <EventDetail currentUser={this.props.currentUser} {...props} />
+            )}
+          />
 
           {this.props.currentUser && (
             <Route path={`/user/${this.props.currentUser.id}`}>

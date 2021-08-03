@@ -6,6 +6,7 @@ import axios from 'axios';
 import { toFinalDate } from './DateUtils';
 
 import QuestionCard from './QuestionCard';
+import { Redirect } from 'react-router-dom';
 
 class EventDetail extends React.Component {
   constructor(props) {
@@ -20,6 +21,7 @@ class EventDetail extends React.Component {
       questions: [],
       nameInput: '',
       contextInput: '',
+      redirect: false,
     };
   }
 
@@ -33,6 +35,7 @@ class EventDetail extends React.Component {
     event.preventDefault();
 
     const questionData = {
+      userId: this.props.currentUser.id,
       name: this.state.nameInput || 'Anonymous',
       context: this.state.contextInput,
       date: new Date(Date.now()),
@@ -52,20 +55,20 @@ class EventDetail extends React.Component {
   }
 
   async fetchEvent() {
-    const event = await axios.get(
-      `/api/event/${this.props.match.params.eventId}`
-    );
-
-    this.setState({ event: event.data.event });
+    await axios
+      .get(`/api/event/${this.props.match.params.eventId}`)
+      .then((res) => {
+        this.setState({ event: res.data.event });
+      })
+      .catch((err) => {
+        this.setState({ redirect: true });
+      });
   }
 
   async fetchEventQuestions() {
-    const questions = await axios.post(
-      `/api/question/${this.props.match.params.eventId}/all`,
-      {}
-    );
-
-    this.setState({ questions: questions.data });
+    await axios
+      .post(`/api/question/${this.props.match.params.eventId}/all`, {})
+      .then((res) => this.setState({ questions: res.data }));
   }
 
   componentDidMount() {
@@ -74,6 +77,10 @@ class EventDetail extends React.Component {
   }
 
   render() {
+    if (this.state.redirect) {
+      return <Redirect to="/" />;
+    }
+
     const renderedQuestionCards =
       this.state.questions.length !== 0 ? (
         this.state.questions.map((question) => {
@@ -82,6 +89,7 @@ class EventDetail extends React.Component {
               <QuestionCard
                 question={question}
                 fetchEventQuestions={this.fetchEventQuestions}
+                currentUser={this.props.currentUser}
               />
             </li>
           );
@@ -115,7 +123,11 @@ class EventDetail extends React.Component {
 
           <div className="col-md-8 mt-5" style={{ maxWidth: '35rem' }}>
             <div className="row">
-              <div className="col-md-12">
+              <div
+                className={`col-md-12 ${
+                  !this.props.currentUser ? 'd-none' : ''
+                }`}
+              >
                 <span className="text-light h6 text-muted">
                   Ask the speaker
                 </span>

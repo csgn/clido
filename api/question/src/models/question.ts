@@ -1,6 +1,7 @@
 import Mongoose from 'mongoose';
 
 interface IQuestionArrayAttrs {
+  userId: string;
   name: string;
   vote: number;
   date: Date;
@@ -29,6 +30,10 @@ const QuestionSchema = new Mongoose.Schema(
     },
     questions: [
       {
+        userId: {
+          type: String,
+          required: true,
+        },
         name: {
           type: String,
           default: 'Anonymous',

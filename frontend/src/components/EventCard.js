@@ -25,9 +25,15 @@ class EventCard extends React.Component {
       .post(`/api/event/${this.state.eventId}/remove`, {
         userId: this.props.userId,
       })
-      .then(() => {
+      .then(async () => {
         this.props.fetchUserEvents();
         this.props.toggleToast();
+
+        await axios
+          .post(`/api/question/${this.state.eventId}/all/remove`)
+          .catch((err) => {
+            console.log(err);
+          });
       })
       .catch((err) => {
         console.error(err);
@@ -63,7 +69,7 @@ class EventCard extends React.Component {
             </div>
           </NavLink>
 
-          <div className="col-auto">
+          <div className="col-auto ">
             <div className="dropdown">
               <button
                 className="btn rounded mt-4 ms-5 pt-1 dropdown-toggle"
