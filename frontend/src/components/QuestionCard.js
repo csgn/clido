@@ -26,10 +26,27 @@ class QuestionCard extends React.Component {
     console.log(this.props.question._id);
   }
 
-  handleVote(event) {
+  async handleVote(event) {
     event.preventDefault();
 
-    console.log(this.props.question._id);
+    let voteStatus = 'vote';
+
+    this.props.question.vote.forEach((el) => {
+      if (el.userId === this.props.currentUser.id) {
+        voteStatus = 'unvote';
+      }
+    });
+
+    await axios
+      .post(`/api/question/${this.props.question._id}/${voteStatus}`, {
+        userId: this.props.currentUser.id,
+      })
+      .then(() => {
+        this.props.fetchEventQuestions();
+      })
+      .catch((err) => {
+        console.error(err);
+      });
   }
 
   render() {
@@ -59,7 +76,7 @@ class QuestionCard extends React.Component {
                     onClick={this.handleVote}
                   >
                     <span className="pe-2 text-dark">
-                      {this.props.question.vote}
+                      {this.props.question.vote.length}
                     </span>
                     <i className="fas fa-heart text-dark fa-lg"></i>
                   </button>
@@ -99,15 +116,6 @@ class QuestionCard extends React.Component {
                   }}
                   aria-labelledby="propertiesMenu"
                 >
-                  <li>
-                    <button
-                      className="dropdown-item bg-light text-dark"
-                      onClick={this.handleEdit}
-                    >
-                      <i className="fas fa-marker me-2"></i>
-                      Edit
-                    </button>
-                  </li>
                   <li>
                     <button
                       className="dropdown-item bg-light text-dark"

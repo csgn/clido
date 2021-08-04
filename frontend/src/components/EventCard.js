@@ -12,7 +12,6 @@ class EventCard extends React.Component {
     super(props);
 
     this.handleRemoveButton = this.handleRemoveButton.bind(this);
-    this.handleShareButton = this.handleShareButton.bind(this);
 
     const { eventName, eventId } = props.event;
     const finalDate = toFinalDate({ ...props.event });
@@ -39,8 +38,6 @@ class EventCard extends React.Component {
         console.error(err);
       });
   }
-
-  handleShareButton() {}
 
   render() {
     return (
@@ -104,15 +101,6 @@ class EventCard extends React.Component {
                   >
                     <i className="fas fa-trash me-2"></i>
                     Remove
-                  </button>
-                </li>
-                <li>
-                  <button
-                    className="dropdown-item bg-dark text-light"
-                    onClick={(e) => this.handleShareButton()}
-                  >
-                    <i className="fas fa-share me-2"></i>
-                    Share
                   </button>
                 </li>
               </ul>

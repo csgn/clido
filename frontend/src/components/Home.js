@@ -5,8 +5,6 @@ import { NavLink, Redirect } from 'react-router-dom';
 
 import axios from 'axios';
 
-import LastEvent from './LastEvent';
-
 class Home extends React.Component {
   constructor(props) {
     super(props);
@@ -136,9 +134,7 @@ class Home extends React.Component {
             </div>
           </div>
         </div>
-        {this.props.currentUser ? (
-          <LastEvent currentUser={this.props.currentUser} />
-        ) : (
+        {!this.props.currentUser && (
           <div className="row mt-5">
             <div className="col-12 d-flex justify-content-center">
               <NavLink to="/signup" className="btn btn-primary">

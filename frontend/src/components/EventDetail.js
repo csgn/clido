@@ -39,7 +39,7 @@ class EventDetail extends React.Component {
       name: this.state.nameInput || 'Anonymous',
       context: this.state.contextInput,
       date: new Date(Date.now()),
-      vote: 0,
+      vote: [],
     };
 
     await axios.post(
