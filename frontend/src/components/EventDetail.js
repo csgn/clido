@@ -3,7 +3,10 @@ import './EventDetail.css';
 import React from 'react';
 import axios from 'axios';
 
+import { toFinalDate } from './DateUtils';
+
 import QuestionCard from './QuestionCard';
+import { Redirect } from 'react-router-dom';
 
 class EventDetail extends React.Component {
   constructor(props) {
@@ -14,9 +17,11 @@ class EventDetail extends React.Component {
     this.handleInput = this.handleInput.bind(this);
 
     this.state = {
+      event: null,
       questions: [],
       nameInput: '',
       contextInput: '',
+      redirect: false,
     };
   }
 
@@ -30,14 +35,15 @@ class EventDetail extends React.Component {
     event.preventDefault();
 
     const questionData = {
+      userId: this.props.currentUser.id,
       name: this.state.nameInput || 'Anonymous',
       context: this.state.contextInput,
       date: new Date(Date.now()),
-      vote: 0,
+      vote: [],
     };
 
     await axios.post(
-      `/api/question/${this.props.location.state.event.eventId}/create`,
+      `/api/question/${this.props.match.params.eventId}/create`,
       {
         ...questionData,
       }
@@ -48,20 +54,33 @@ class EventDetail extends React.Component {
     this.setState({ contextInput: '' });
   }
 
-  async fetchEventQuestions() {
-    const questions = await axios.post(
-      `/api/question/${this.props.location.state.event.eventId}/all`,
-      {}
-    );
+  async fetchEvent() {
+    await axios
+      .get(`/api/event/${this.props.match.params.eventId}`)
+      .then((res) => {
+        this.setState({ event: res.data.event });
+      })
+      .catch((err) => {
+        this.setState({ redirect: true });
+      });
+  }
 
-    this.setState({ questions: questions.data });
+  async fetchEventQuestions() {
+    await axios
+      .post(`/api/question/${this.props.match.params.eventId}/all`, {})
+      .then((res) => this.setState({ questions: res.data }));
   }
 
   componentDidMount() {
+    this.fetchEvent();
     this.fetchEventQuestions();
   }
 
   render() {
+    if (this.state.redirect) {
+      return <Redirect to="/" />;
+    }
+
     const renderedQuestionCards =
       this.state.questions.length !== 0 ? (
         this.state.questions.map((question) => {
@@ -70,6 +89,7 @@ class EventDetail extends React.Component {
               <QuestionCard
                 question={question}
                 fetchEventQuestions={this.fetchEventQuestions}
+                currentUser={this.props.currentUser}
               />
             </li>
           );
@@ -87,23 +107,27 @@ class EventDetail extends React.Component {
     return (
       <>
         <div className="row mt-5">
-          {this.props.location.state.event && (
+          {this.state.event && (
             <div className="col-md-4 mt-5">
               <div className="h4 text-light">
-                {this.props.location.state.event.eventName}
+                {this.state.event.eventName || null}
               </div>
               <div className="h5 text-muted">
-                {this.props.location.state.finalDate}
+                {toFinalDate({ ...this.state.event }) || null}
               </div>
               <div className="h6 text-muted">
-                #{this.props.location.state.event.eventId}
+                #{this.state.event.eventId || null}
               </div>
             </div>
           )}
 
           <div className="col-md-8 mt-5" style={{ maxWidth: '35rem' }}>
             <div className="row">
-              <div className="col-md-12">
+              <div
+                className={`col-md-12 ${
+                  !this.props.currentUser ? 'd-none' : ''
+                }`}
+              >
                 <span className="text-light h6 text-muted">
                   Ask the speaker
                 </span>

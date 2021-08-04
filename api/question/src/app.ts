@@ -3,6 +3,8 @@ import 'express-async-errors';
 
 import { createRouter } from './routes/create';
 import { allRouter } from './routes/all';
+import { withdrawRouter } from './routes/withdraw';
+import { voteRouter } from './routes/vote';
 
 import { errorHandler } from './middlewares/error-handler';
 import { NotFoundError } from './errors/not-found-error';
@@ -13,6 +15,8 @@ app.use(Express.json());
 
 app.use(createRouter);
 app.use(allRouter);
+app.use(withdrawRouter);
+app.use(voteRouter);
 
 app.all('*', () => {
   throw new NotFoundError();

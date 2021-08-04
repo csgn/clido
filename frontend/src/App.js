@@ -27,7 +27,9 @@ class App extends React.Component {
   render() {
     return (
       <div className="container mt-5">
-        <Header currentUser={this.state.currentUser} />
+        <div className="d-flex justify-content-center">
+          <Header currentUser={this.state.currentUser} />
+        </div>
         <Navigation
           currentUser={this.state.currentUser}
           getCurrentUser={this.getCurrentUser}

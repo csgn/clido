@@ -1,5 +1,6 @@
 import React from 'react';
 import moment from 'moment';
+import axios from 'axios';
 
 class QuestionCard extends React.Component {
   constructor(props) {
@@ -13,7 +14,10 @@ class QuestionCard extends React.Component {
   handleWithdraw(event) {
     event.preventDefault();
 
-    console.log(this.props.question._id);
+    axios.post(`/api/question/${this.props.question._id}/withdraw`).then(() => {
+      // console.log(`Question ${this.props.question._id} withdrawn`);
+      this.props.fetchEventQuestions();
+    });
   }
 
   handleEdit(event) {
@@ -22,10 +26,27 @@ class QuestionCard extends React.Component {
     console.log(this.props.question._id);
   }
 
-  handleVote(event) {
+  async handleVote(event) {
     event.preventDefault();
 
-    console.log(this.props.question._id);
+    let voteStatus = 'vote';
+
+    this.props.question.vote.forEach((el) => {
+      if (el.userId === this.props.currentUser.id) {
+        voteStatus = 'unvote';
+      }
+    });
+
+    await axios
+      .post(`/api/question/${this.props.question._id}/${voteStatus}`, {
+        userId: this.props.currentUser.id,
+      })
+      .then(() => {
+        this.props.fetchEventQuestions();
+      })
+      .catch((err) => {
+        console.error(err);
+      });
   }
 
   render() {
@@ -47,7 +68,7 @@ class QuestionCard extends React.Component {
                     {moment(new Date(this.props.question.date)).fromNow()}
                   </div>
                 </div>
-                <div>
+                <div className={`${this.props.currentUser ? '' : 'd-none'}`}>
                   <button
                     className="btn rounded"
                     type="button"
@@ -55,7 +76,7 @@ class QuestionCard extends React.Component {
                     onClick={this.handleVote}
                   >
                     <span className="pe-2 text-dark">
-                      {this.props.question.vote}
+                      {this.props.question.vote.length}
                     </span>
                     <i className="fas fa-heart text-dark fa-lg"></i>
                   </button>
@@ -69,7 +90,14 @@ class QuestionCard extends React.Component {
               </div>
             </div>
 
-            <div className="col-12 text-dark">
+            <div
+              className={`col-12 text-dark ${
+                this.props.currentUser &&
+                this.props.currentUser.id === this.props.question.userId
+                  ? ''
+                  : 'd-none'
+              }`}
+            >
               <div className="dropdown d-flex flex-row-reverse">
                 <button
                   className="btn rounded"
@@ -88,15 +116,6 @@ class QuestionCard extends React.Component {
                   }}
                   aria-labelledby="propertiesMenu"
                 >
-                  <li>
-                    <button
-                      className="dropdown-item bg-light text-dark"
-                      onClick={this.handleEdit}
-                    >
-                      <i className="fas fa-marker me-2"></i>
-                      Edit
-                    </button>
-                  </li>
                   <li>
                     <button
                       className="dropdown-item bg-light text-dark"

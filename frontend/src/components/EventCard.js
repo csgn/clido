@@ -5,57 +5,18 @@ import { NavLink } from 'react-router-dom';
 
 import axios from 'axios';
 
+import { toFinalDate } from './DateUtils';
+
 class EventCard extends React.Component {
   constructor(props) {
     super(props);
 
     this.handleRemoveButton = this.handleRemoveButton.bind(this);
-    this.handleShareButton = this.handleShareButton.bind(this);
 
     const { eventName, eventId } = props.event;
-
-    const finalDate = this.toString({
-      startDate: new Date(props.event.startDate),
-      endDate: new Date(props.event.endDate),
-    });
+    const finalDate = toFinalDate({ ...props.event });
 
     this.state = { eventName, eventId, finalDate };
-  }
-
-  toString({ startDate, endDate }) {
-    const startDateArray = startDate.toDateString().toString().split(' ');
-    const endDateArray = endDate.toDateString().toString().split(' ');
-
-    const sdd = startDateArray[2];
-    const edd = endDateArray[2];
-
-    const smm = startDateArray[1];
-    const emm = endDateArray[1];
-
-    const syy = startDateArray[3];
-    const eyy = endDateArray[3];
-
-    let finalDate = [];
-    finalDate.push(sdd);
-
-    if (smm === emm) {
-      if (sdd !== edd) {
-        finalDate.push('-');
-        finalDate.push(edd);
-      }
-      finalDate.push(smm);
-    } else {
-      finalDate.push(smm);
-      finalDate.push('-');
-      finalDate.push(edd);
-      finalDate.push(emm);
-    }
-
-    if (syy === eyy) {
-      finalDate.push(syy);
-    }
-
-    return finalDate.join(' ').toString();
   }
 
   async handleRemoveButton() {
@@ -63,16 +24,20 @@ class EventCard extends React.Component {
       .post(`/api/event/${this.state.eventId}/remove`, {
         userId: this.props.userId,
       })
-      .then((result) => {
+      .then(async () => {
         this.props.fetchUserEvents();
         this.props.toggleToast();
+
+        await axios
+          .post(`/api/question/${this.state.eventId}/all/remove`)
+          .catch((err) => {
+            console.log(err);
+          });
       })
       .catch((err) => {
         console.error(err);
       });
   }
-
-  handleShareButton() {}
 
   render() {
     return (
@@ -86,13 +51,7 @@ class EventCard extends React.Component {
           </div>
           <NavLink
             className="col-8 text-decoration-none"
-            to={{
-              pathname: `/event/${this.state.eventId}`,
-              state: {
-                event: this.props.event,
-                finalDate: this.state.finalDate,
-              },
-            }}
+            to={`/event/${this.state.eventId}`}
           >
             <div className="card-body text-light">
               <div className="card-title">
@@ -107,7 +66,7 @@ class EventCard extends React.Component {
             </div>
           </NavLink>
 
-          <div className="col-auto">
+          <div className="col-auto ">
             <div className="dropdown">
               <button
                 className="btn rounded mt-4 ms-5 pt-1 dropdown-toggle"
@@ -142,15 +101,6 @@ class EventCard extends React.Component {
                   >
                     <i className="fas fa-trash me-2"></i>
                     Remove
-                  </button>
-                </li>
-                <li>
-                  <button
-                    className="dropdown-item bg-dark text-light"
-                    onClick={(e) => this.handleShareButton()}
-                  >
-                    <i className="fas fa-share me-2"></i>
-                    Share
                   </button>
                 </li>
               </ul>

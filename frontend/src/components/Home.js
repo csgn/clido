@@ -1,9 +1,9 @@
 /* eslint-disable jsx-a11y/alt-text */
 import './Home.css';
 import React from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, Redirect } from 'react-router-dom';
 
-import LastEvent from './LastEvent';
+import axios from 'axios';
 
 class Home extends React.Component {
   constructor(props) {
@@ -11,20 +11,36 @@ class Home extends React.Component {
 
     this.handleInput = this.handleInput.bind(this);
 
-    this.state = { eventId: '', loadActive: false, error: false };
+    this.state = {
+      eventId: '',
+      loading: false,
+      error: null,
+      redirect: false,
+    };
   }
 
-  handleInput(event) {
+  async handleInput(event) {
     event.preventDefault();
 
     if (this.state.eventId.length < 6) {
       this.setState({
-        error: true,
+        error: 'Please enter an event code',
       });
     } else {
-      this.setState({
-        loadActive: true,
-        error: false,
+      this.setState({ loading: true }, async () => {
+        try {
+          const response = await axios.get(`/api/event/${this.state.eventId}`);
+          this.setState({
+            loading: false,
+            redirect: true,
+            event: response.data.event,
+          });
+        } catch (e) {
+          this.setState({
+            loading: false,
+            error: e.response.data.errors[0].message,
+          });
+        }
       });
     }
   }
@@ -34,6 +50,9 @@ class Home extends React.Component {
   }
 
   render() {
+    if (this.state.redirect) {
+    }
+
     return (
       <div className="home row justify-content-center animate__animated animate__fadeIn">
         <div className="col-12 d-flex justify-content-center mt-5 pt-5">
@@ -68,7 +87,7 @@ class Home extends React.Component {
                 onChange={(e) =>
                   this.setState({
                     eventId: e.target.value,
-                    error: false,
+                    error: null,
                   })
                 }
               />
@@ -90,16 +109,14 @@ class Home extends React.Component {
             <div className="d-flex justify-content-center mt-5">
               {this.state.error && (
                 <div className="text-danger animate__animated animate__slideInDown">
-                  {this.state.error && (
-                    <span>
-                      <i className="fas fa-exclamation me-2"></i>
-                      Please enter an event code
-                    </span>
-                  )}
+                  <span>
+                    <i className="fas fa-exclamation me-2"></i>
+                    {this.state.error}
+                  </span>
                 </div>
               )}
 
-              {this.state.loadActive && (
+              {this.state.loading ? (
                 <div
                   className="spinner-grow mt-5"
                   role="status"
@@ -107,13 +124,17 @@ class Home extends React.Component {
                 >
                   <span className="sr-only">Loading</span>
                 </div>
+              ) : (
+                <>
+                  {this.state.redirect && (
+                    <Redirect to={`/event/${this.state.eventId}`} />
+                  )}
+                </>
               )}
             </div>
           </div>
         </div>
-        {this.props.currentUser ? (
-          <LastEvent currentUser={this.props.currentUser} />
-        ) : (
+        {!this.props.currentUser && (
           <div className="row mt-5">
             <div className="col-12 d-flex justify-content-center">
               <NavLink to="/signup" className="btn btn-primary">

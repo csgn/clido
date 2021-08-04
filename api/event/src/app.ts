@@ -3,6 +3,7 @@ import 'express-async-errors';
 
 import { errorHandler } from './middlewares/error-handler';
 
+import { getRouter } from './routes/get';
 import { createRouter } from './routes/create';
 import { allRouter } from './routes/all';
 import { removeRouter } from './routes/remove';
@@ -13,6 +14,7 @@ const app = Express();
 app.set('trust proxy', true);
 app.use(Express.json());
 
+app.use(getRouter);
 app.use(createRouter);
 app.use(allRouter);
 app.use(removeRouter);

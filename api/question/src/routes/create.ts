@@ -9,10 +9,12 @@ const router = Express.Router();
 router.post(
   '/api/question/:eventId/create',
   async (req: Express.Request, res: Express.Response) => {
-    const { name, vote, date, context } = req.body;
+    const { userId, name, vote, date, context } = req.body;
     const { eventId } = req.params;
 
-    const questions: [IQuestionArrayAttrs] = [{ name, vote, date, context }];
+    const questions: [IQuestionArrayAttrs] = [
+      { userId, name, vote, date, context },
+    ];
 
     let question = await Question.findOne({ eventId });
 
